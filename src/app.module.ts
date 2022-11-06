@@ -14,7 +14,7 @@ import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { UserInterceptor } from './user/interceptor/user.interceptor';
 import { ResponseInterceptor } from './global/interceptor/response.interceptor';
 import { RequestInterceptor } from './global/interceptor/request.interceptor';
-import { EntityNotFoundFilter } from './global/interceptor/exception/entitynotfound.exceptionfilter';
+import { EntityNotFoundFilter } from './global/exception/entitynotfound.exceptionfilter';
 
 const databaseConfig = new DatabaseConfig();
 
