@@ -9,7 +9,6 @@ import { AuthService } from './auth.service';
 
 const kakaoConfig = new KakaoConfig();
 
-const {default: axios} = require('axios');
 const qs = require('qs');
 
 const KAUTH_HOST_NAME = 'https://kauth.kakao.com';
