@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity('Mbtiresult')
+@Entity('mbtiresult')
 export class Mbtiresult {
 
     @PrimaryGeneratedColumn('increment')
