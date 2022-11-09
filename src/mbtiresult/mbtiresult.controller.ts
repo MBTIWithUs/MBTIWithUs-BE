@@ -16,10 +16,11 @@ export class MbtiresultController {
     ) {}
 
   @Post()
-  async create(@Body() createMbtiresultQuestionsDto: CreateMbtiresultQuestionsDto): Promise<Mbtiresult> {
+  async create(@Body() createMbtiresultQuestionsDto: CreateMbtiresultQuestionsDto, @Request() req): Promise<Mbtiresult> {
     let targetId = createMbtiresultQuestionsDto.targetId;
     let targetUser = await this.userService.findOne(targetId);
-    return await this.mbtiresultService.create(createMbtiresultQuestionsDto, 1);
+    let writerUser: User = req.user;
+    return await this.mbtiresultService.create(createMbtiresultQuestionsDto, writerUser.id);
   }
 
   @Get(':id')
