@@ -20,8 +20,7 @@ export class MbtiresultController {
     let targetId = createMbtiresultQuestionsDto.targetId;
     let targetUser = await this.userService.findOne(targetId);
     let writerUser: User = req.user;
-    console.log(writerUser);
-    return await this.mbtiresultService.create(createMbtiresultQuestionsDto, writerUser.id);
+    return await this.mbtiresultService.create(createMbtiresultQuestionsDto, +writerUser.id);
   }
 
   @Get(':id')
