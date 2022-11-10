@@ -41,7 +41,7 @@ export class UserInterceptor implements NestInterceptor {
                 }
             }
 
-            delete obj[key];
+            // delete obj[key];
             obj[includes[key]] = mem[userId];
         }
 
