@@ -27,7 +27,6 @@ export class AuthController {
     async findAccessToken(@Req() req) {
         let user: User = req.user;
         let tokens = await this.authService.getTokens(user);
-        console.log(tokens);
         return tokens;
     }
 

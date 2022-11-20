@@ -106,7 +106,6 @@ export class MbtiresultService {
         createdAt: "ASC"
       }
     });
-    console.log(mbtiresults);
     return mbtiresults;
   }
 

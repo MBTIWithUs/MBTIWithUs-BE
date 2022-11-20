@@ -7,7 +7,33 @@ export class ResponseInterceptor implements NestInterceptor {
     intercept(context: ExecutionContext, next: CallHandler<any>): Observable<any> | Promise<Observable<any>> {
         return next.handle()
             .pipe(map(data => this.removeUpperCase(data)))
+            .pipe(map(data => this.removeSecured(data)))
         ;
+    }
+
+    removeSecured(obj: Object) {
+        let includes = new Set([
+            'social_id',
+            'provider',
+            'refresh_token',
+            'target_deleted_at',
+            'writer_deleted_at',
+            'left_answer_type',
+            'right_answer_type',
+            'deleted_at',
+        ]);
+
+        for (var key in obj) {
+            if (obj[key] instanceof Object) {
+                this.removeSecured(obj[key]);
+                continue;
+            }
+            if (!includes.has(key)) continue;
+
+            delete obj[key];
+        }
+
+        return obj;
     }
 
     removeUpperCase(obj: Object) {

@@ -21,12 +21,18 @@ export class UserInterceptor implements NestInterceptor {
         includes['writerId'] = 'writer_nickname';
         includes['target_id'] = 'target_nickname';
         includes['writer_id'] = 'writer_nickname';
+        includes['creatorId'] = 'creator_nickname';
+        includes['creator_id'] = 'creator_nickname';
 
         let result = await this.toNicknameDP(obj, {}, includes);
         return result;
     }
 
-    async toNicknameDP(obj: Object, mem: Object, includes: Object) {
+    async toNicknameDP(obj: any, mem: Object, includes: Object) {
+        let isAnonymous = false;
+        if (Boolean(obj?.isAnonymous) || Boolean(obj?.is_anonymous)) {
+            isAnonymous = true;
+        }
         for (var key in obj) {
             if (obj[key] instanceof Object) await this.toNicknameDP(obj[key], mem, includes);
             if (!includes.hasOwnProperty(key)) continue;
@@ -35,14 +41,18 @@ export class UserInterceptor implements NestInterceptor {
             if (!Boolean(mem[userId])) {
                 try {
                     let nickname = (await this.userService.findOne(userId)).nickname;
-                    mem[userId] = Boolean(nickname)? nickname: "Unknown";
+                    mem[userId] = Boolean(nickname)? nickname: "<Unknown>";
                 } catch (error) {
-                    mem[userId] = 'Unknown';
+                    mem[userId] = '<Unknown>';
                 }
             }
 
-            // delete obj[key];
-            obj[includes[key]] = mem[userId];
+            if (!isAnonymous) {
+                obj[includes[key]] = mem[userId];
+            }
+            else {
+                obj[includes[key]] = "<Anonymous>";
+            }
         }
 
         return obj;

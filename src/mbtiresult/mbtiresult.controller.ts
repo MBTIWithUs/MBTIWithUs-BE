@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, NotFoundException, UseInterceptors, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request, NotFoundException, UseInterceptors, Put, UnauthorizedException } from '@nestjs/common';
 import { MbtiresultService } from './mbtiresult.service';
 import { Mbtiresult } from './entities/mbtiresult.entity';
 import { CreateMbtiresultQuestionsDto } from './dto/create-mbtiresult-questions.dto';
@@ -52,17 +52,32 @@ export class MbtiresultController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateMbtiresultQuestionsDto: UpdateMbtiresultQuestionsDto): Promise<Mbtiresult> {
+  async update(@Param('id') id: string, @Body() updateMbtiresultQuestionsDto: UpdateMbtiresultQuestionsDto, @Request() req): Promise<Mbtiresult> {
+    let user: User = req.user;
+    let mbtiresult: Mbtiresult = await this.mbtiresultService.findOne(+id);
+    if (user.id != mbtiresult.writerId) {
+      throw new UnauthorizedException("Put method not allowed.");
+    }
     return await this.mbtiresultService.update(+id, updateMbtiresultQuestionsDto);
   }
 
   @Delete('target/:id')
-  async removeOneFromTarget(@Param('id') id: string): Promise<void> {
+  async removeOneFromTarget(@Param('id') id: string, @Request() req): Promise<void> {
+    let user: User = req.user;
+    let mbtiresult: Mbtiresult = await this.mbtiresultService.findOne(+id);
+    if (user.id != mbtiresult.targetId) {
+      throw new UnauthorizedException("Put method not allowed.");
+    }
     await this.mbtiresultService.removeOneFromTarget(+id);
   }
 
   @Delete('writer/:id')
-  async removeOneFromWriter(@Param('id') id: string): Promise<void> {
+  async removeOneFromWriter(@Param('id') id: string, @Request() req): Promise<void> {
+    let user: User = req.user;
+    let mbtiresult: Mbtiresult = await this.mbtiresultService.findOne(+id);
+    if (user.id != mbtiresult.writerId) {
+      throw new UnauthorizedException("Put method not allowed.");
+    }
     await this.mbtiresultService.removeOneFromWriter(+id);
   }
 

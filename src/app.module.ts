@@ -15,6 +15,7 @@ import { UserInterceptor } from './user/interceptor/user.interceptor';
 import { ResponseInterceptor } from './global/interceptor/response.interceptor';
 import { RequestInterceptor } from './global/interceptor/request.interceptor';
 import { EntityNotFoundFilter } from './global/exception/entitynotfound.exceptionfilter';
+import { CommentModule } from './comment/comment.module';
 
 const databaseConfig = new DatabaseConfig();
 
@@ -28,7 +29,7 @@ const databaseConfig = new DatabaseConfig();
       password: databaseConfig.password,
       database: databaseConfig.database,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: false,
+      synchronize: true,
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
@@ -39,7 +40,7 @@ const databaseConfig = new DatabaseConfig();
     MbtilogModule, 
     CommunityModule, 
     AuthModule, 
-    JwtModule,
+    JwtModule, CommentModule,
   ],
 
   providers: [

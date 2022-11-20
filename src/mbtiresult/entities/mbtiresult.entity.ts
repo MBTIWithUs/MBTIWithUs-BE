@@ -36,7 +36,7 @@ export class Mbtiresult {
 
     @Column({ name: "created_at", type: 'bigint' })
     createdAt: string;
-    @Column({ name: "update_at", type: 'bigint', nullable: true })
+    @Column({ name: "updated_at", type: 'bigint', nullable: true })
     updatedAt: string;
 
     @Column({ name: "target_deleted_at", type: 'bigint', nullable: true })
