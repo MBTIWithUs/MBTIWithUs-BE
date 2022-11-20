@@ -98,16 +98,26 @@ export class MbtiresultService {
   }
 
   async findByWriterId(writerId: number): Promise<Mbtiresult[]> {
-    let mbtiresults: Mbtiresult[] = await this.mbtiresultRepository.findBy({
-      writerId: writerId, writerDeletedAt: IsNull()
+    let mbtiresults: Mbtiresult[] = await this.mbtiresultRepository.find({
+      where: {
+        writerId: writerId, writerDeletedAt: IsNull()
+      },
+      order: {
+        createdAt: "ASC"
+      }
     });
     console.log(mbtiresults);
     return mbtiresults;
   }
 
   async findByTargetId(targetId: number): Promise<Mbtiresult[]> {
-    let mbtiresults: Mbtiresult[] = await this.mbtiresultRepository.findBy({
-      targetId: targetId, targetDeletedAt: IsNull()
+    let mbtiresults: Mbtiresult[] = await this.mbtiresultRepository.find({
+      where: {
+        targetId: targetId, targetDeletedAt: IsNull(),
+      },
+      order: {
+        createdAt: "ASC"
+      }
     });
     return mbtiresults;
   }
