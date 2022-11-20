@@ -29,7 +29,7 @@ const databaseConfig = new DatabaseConfig();
       password: databaseConfig.password,
       database: databaseConfig.database,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+      synchronize: false,
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
