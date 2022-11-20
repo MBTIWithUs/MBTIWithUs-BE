@@ -6,41 +6,41 @@ export class Mbtiresult {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @Column()
+    @Column({ name: "target_id", })
     targetId: number;
-    @Column()
+    @Column({ name: "writer_id", })
     writerId: number;
 
-    @Column()
+    @Column({ name: "sheet_type", })
     sheetType: number;
 
-    @Column()
+    @Column({ name: "e_score", })
     eScore: number;
-    @Column()
+    @Column({ name: "i_score", })
     iScore: number;
 
-    @Column()
+    @Column({ name: "s_score", })
     sScore: number;
-    @Column()
+    @Column({ name: "n_score", })
     nScore: number;
 
-    @Column()
+    @Column({ name: "t_score", })
     tScore: number;
-    @Column()
+    @Column({ name: "f_score", })
     fScore: number;
 
-    @Column()
+    @Column({ name: "j_score", })
     jScore: number;
-    @Column()
+    @Column({ name: "p_score", })
     pScore: number;
 
-    @Column({ type: 'bigint' })
+    @Column({ name: "created_at", type: 'bigint' })
     createdAt: string;
-    @Column({ type: 'bigint', nullable: true })
+    @Column({ name: "update_at", type: 'bigint', nullable: true })
     updatedAt: string;
 
-    @Column({ type: 'bigint', nullable: true })
+    @Column({ name: "target_deleted_at", type: 'bigint', nullable: true })
     targetDeletedAt: string;
-    @Column({ type: 'bigint', nullable: true })
+    @Column({ name: "writer_deleted_at", type: 'bigint', nullable: true })
     writerDeletedAt: string;
 }

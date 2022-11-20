@@ -6,20 +6,20 @@ export class Mbtilog {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @Column({ type: 'bigint' })
+    @Column({ name: "result_id", type: 'bigint' })
     resultId: number;
-    @Column({ type: 'bigint' })
+    @Column({ name: "sheet_id", type: 'bigint' })
     sheetId: number;
 
-    @Column()
+    @Column({ name: "score" })
     score: number;
-    @Column({ length: 16 })
+    @Column({ name: "score_type", length: 16 })
     scoreType: string;
 
-    @Column({ type: 'bigint' })
+    @Column({ name: "created_at", type: 'bigint' })
     createdAt: string;
-    @Column({ type: 'bigint', nullable: true })
+    @Column({ name: "updated_at", type: 'bigint', nullable: true })
     updatedAt: string;
-    @Column({ type: 'bigint', nullable: true })
+    @Column({ name: "deleted_at", type: 'bigint', nullable: true })
     deletedAt: string;
 }

@@ -6,18 +6,18 @@ export class User {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @Column({ length: 64 })
+    @Column({ name: "nickname", length: 64 })
     nickname: string;
 
-    @Column({ type: 'bigint' })
+    @Column({ name: "social_id", type: 'bigint' })
     socialId: string;
 
-    @Column({ length: 64 })
+    @Column({ name: "provider", length: 64 })
     provider: string;
 
-    @Column({ length: 256, nullable: true })
+    @Column({ name: "profile_image_url", length: 256, nullable: true })
     profileImageUrl: string;
 
-    @Column({ length: 512, nullable: true })
+    @Column({ name: "refresh_token", length: 512, nullable: true })
     refreshToken: string;
 }
