@@ -73,6 +73,10 @@ export class CommunityService {
     return paginated;
   }
 
+  async findAllWithoutLikeRelations(options: IPaginationOptions): Promise<Pagination<CommunitySummary>> {
+    return await paginate(this.communitySummaryRepository, options);
+  }
+
   async findOne(id: number, userId: number): Promise<any> {
     let community: Community = await this.communityRepository.findOneByOrFail({
       id: id, deletedAt: IsNull()
@@ -94,6 +98,22 @@ export class CommunityService {
       comment.isLiked = await this.commentService.findIsLiked(comment.id, userId);
     }
     return result;
+  }
+
+  async findOneWithoutLikeRelations(id: number): Promise<any> {
+    let community: Community = await this.communityRepository.findOneByOrFail({
+      id: id, deletedAt: IsNull()
+    });
+    community.views++;
+    await this.communityRepository.save(community);
+    return await this.communityRepository.findOneOrFail({
+      where: {
+        id: id, deletedAt: IsNull()
+      },
+      relations: {
+        comments: true
+      }
+    });
   }
 
   async findOneNoViewsIncrease(id: number, userId: number): Promise<any> {
