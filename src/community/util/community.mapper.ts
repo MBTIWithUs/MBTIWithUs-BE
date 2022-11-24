@@ -9,6 +9,7 @@ export class CommunityMapper {
         entity.isAnonymous = createDto.isAnonymous;
         entity.title = createDto.title
         entity.content = createDto.content;
+        entity.tag = createDto.tag;
         entity.views = 0;
         entity.createdAt = new Date().getTime() + "";
         return entity;
@@ -17,6 +18,7 @@ export class CommunityMapper {
     updateDtoToEntity(updateDto: UpdateCommunityDto, entity: Community): void {
         if (Boolean(updateDto.title)) entity.title = updateDto.title;
         if (Boolean(updateDto.content)) entity.content = updateDto.content;
+        if (Boolean(updateDto.tag)) entity.tag = updateDto.tag;
         entity.updatedAt = new Date().getTime() + "";
     }
 }

@@ -15,6 +15,9 @@ export class CreateCommunityDto {
     @IsNotEmpty()
     @Length(10, 1024)
     content: string;
+    @IsNotEmpty()
+    @Length(4, 16)
+    tag: string;
 
     // views: number;
     // likes: number;
