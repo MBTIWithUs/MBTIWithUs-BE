@@ -29,7 +29,7 @@ export class CommunityController {
     if (Boolean(tag)) {
       return await this.communityService.findAllByTagWithoutLikeRelations({
         page, limit, 
-        route: "/community/search/anonymous",
+        route: "/community/search/anonymous?tag=" + tag,
       }, tag);
     }
     else {
@@ -53,7 +53,7 @@ export class CommunityController {
     if (Boolean(tag)) {
       return await this.communityService.findAllByTag({
         page, limit, 
-        route: "/community/search",
+        route: "/community/search?tag=" + tag,
       }, tag, user.id);
     }
     else {
