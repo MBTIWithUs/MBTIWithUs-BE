@@ -64,7 +64,22 @@ export class CommunityService {
 
   async findAll(options: IPaginationOptions, userId: number): Promise<Pagination<CommunitySummary>> {
     let queryBuilder = this.communitySummaryRepository.createQueryBuilder('cs');
-    queryBuilder.where('cs.deletedAt IS NULL');
+    queryBuilder
+      .where('cs.deletedAt IS NULL');
+    let paginated: Pagination<any> = await paginate(queryBuilder, options);
+    for (let communitySummary of paginated.items) {
+      communitySummary.likes = await this.findLikeCount(communitySummary.id);
+      communitySummary.isLiked = await this.findIsLiked(communitySummary.id, userId);
+    }
+    return paginated;
+  }
+
+  async findAllByTag(options: IPaginationOptions, tag: string, userId: number): Promise<Pagination<CommunitySummary>> {
+    let queryBuilder = this.communitySummaryRepository.createQueryBuilder('cs');
+    queryBuilder
+      .where('cs.deletedAt IS NULL')
+      .where('cs.tag = :tag', { tag: tag })
+      ;
     let paginated: Pagination<any> = await paginate(queryBuilder, options);
     for (let communitySummary of paginated.items) {
       communitySummary.likes = await this.findLikeCount(communitySummary.id);
@@ -74,7 +89,21 @@ export class CommunityService {
   }
 
   async findAllWithoutLikeRelations(options: IPaginationOptions): Promise<Pagination<CommunitySummary>> {
-    return await paginate(this.communitySummaryRepository, options);
+    let queryBuilder = this.communitySummaryRepository.createQueryBuilder('cs');
+    queryBuilder
+      .where('cs.deletedAt IS NULL');
+    let paginated: Pagination<any> = await paginate(queryBuilder, options);
+    return paginated;
+  }
+
+  async findAllByTagWithoutLikeRelations(options: IPaginationOptions, tag: string): Promise<Pagination<CommunitySummary>> {
+    let queryBuilder = this.communitySummaryRepository.createQueryBuilder('cs');
+    queryBuilder
+      .where('cs.deletedAt IS NULL')
+      .where('cs.tag = :tag', { tag: tag })
+      ;
+    let paginated: Pagination<any> = await paginate(queryBuilder, options);
+    return paginated;
   }
 
   async findOne(id: number, userId: number): Promise<any> {

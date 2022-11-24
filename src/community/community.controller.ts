@@ -19,39 +19,61 @@ export class CommunityController {
     return await this.communityService.create(createCommunityDto, user.id);
   }
 
+  @Get("/search/anonymous")
+  async findAllAnonymous(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+    @Query('tag') tag: string
+  ): Promise<Pagination<CommunitySummary>> {
+    limit = limit > 100 ? 100 : limit;
+    if (Boolean(tag)) {
+      return await this.communityService.findAllByTagWithoutLikeRelations({
+        page, limit, 
+        route: "/community/search/anonymous",
+      }, tag);
+    }
+    else {
+      return await this.communityService.findAllWithoutLikeRelations({
+        page, limit, 
+        route: "/community/search/anonymous",
+      });
+    }
+  }
+
   @Get("/search")
+  @UseGuards(AuthGuard('jwt'))
   async findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
+    @Query('tag') tag: string,
     @Request() req,
   ): Promise<Pagination<CommunitySummary>> {
     limit = limit > 100 ? 100 : limit;
-    let user: User | null | undefined = req.user;
-    console.log(page, limit, user);
-    if (Boolean(user)) {
+    let user: User = req.user;
+    if (Boolean(tag)) {
+      return await this.communityService.findAllByTag({
+        page, limit, 
+        route: "/community/search",
+      }, tag, user.id);
+    }
+    else {
       return await this.communityService.findAll({
         page, limit, 
         route: "/community/search",
       }, user.id);
     }
-    else {
-      return await this.communityService.findAllWithoutLikeRelations({
-        page, limit, 
-        route: "/community/search",
-      });
-    }
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'))
   async findOne(@Param('id') id: string, @Request() req): Promise<any> {
     let user: User | null | undefined = req.user;
-    console.log(id, user);
-    if (Boolean(user)) {
-      return await this.communityService.findOne(+id, user.id);
-    }
-    else {
-      return await this.communityService.findOneWithoutLikeRelations(+id);
-    }
+    return await this.communityService.findOne(+id, user.id);
+  }
+
+  @Get('/anonymous/:id')
+  async findOneA(@Param('id') id: string, @Request() req): Promise<any> {
+    return await this.communityService.findOneWithoutLikeRelations(+id);
   }
 
   @Put(':id')
@@ -77,7 +99,6 @@ export class CommunityController {
   }
 
   @Post(':id/like')
-  @UseGuards(AuthGuard('jwt'))
   async toggleLike(@Param('id') id: string, @Request() req): Promise<any> {
     let user: User = req.user;
     return await this.communityService.toggleLike(+id, user.id);
