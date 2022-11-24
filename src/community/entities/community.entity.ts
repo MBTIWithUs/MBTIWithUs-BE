@@ -18,6 +18,8 @@ export class Community {
     title: string;
     @Column({ name: "content", length: 1024 })
     content: string;
+    @Column({ name: "tag", length: 16 })
+    tag: string;
 
     @Column({ name: "views" })
     views: number;

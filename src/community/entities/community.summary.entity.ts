@@ -8,6 +8,7 @@ import { Community } from "./community.entity";
         .addSelect("community.creatorId", "creatorId")
         .addSelect("community.isAnonymous", "isAnonymous")
         .addSelect("community.title", "title")
+        .addSelect("community.tag", "tag")
         .addSelect("community.views", "views")
         .addSelect("community.createdAt", "createdAt")
         .addSelect("community.updatedAt", "updatedAt")
@@ -25,6 +26,8 @@ export class CommunitySummary {
 
     @ViewColumn()
     title: string;
+    @ViewColumn()
+    tag: string;
 
     @ViewColumn()
     views: number;
