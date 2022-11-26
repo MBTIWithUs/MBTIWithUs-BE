@@ -16,6 +16,7 @@ import { ResponseInterceptor } from './global/interceptor/response.interceptor';
 import { RequestInterceptor } from './global/interceptor/request.interceptor';
 import { EntityNotFoundFilter } from './global/exception/entitynotfound.exceptionfilter';
 import { CommentModule } from './comment/comment.module';
+import { StorageModule } from './storage/storage.module';
 
 const databaseConfig = new DatabaseConfig();
 
@@ -40,7 +41,7 @@ const databaseConfig = new DatabaseConfig();
     MbtilogModule, 
     CommunityModule, 
     AuthModule, 
-    JwtModule, CommentModule,
+    JwtModule, CommentModule, StorageModule,
   ],
 
   providers: [

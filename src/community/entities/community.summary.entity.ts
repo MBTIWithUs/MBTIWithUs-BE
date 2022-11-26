@@ -8,6 +8,8 @@ import { Community } from "./community.entity";
         .addSelect("community.creatorId", "creatorId")
         .addSelect("community.isAnonymous", "isAnonymous")
         .addSelect("community.title", "title")
+        .addSelect("community.summary", "summary")
+        .addSelect("community.thumbnail", "thumbnail")
         .addSelect("community.tag", "tag")
         .addSelect("community.views", "views")
         .addSelect("community.createdAt", "createdAt")
@@ -28,6 +30,10 @@ export class CommunitySummary {
     title: string;
     @ViewColumn()
     tag: string;
+    @ViewColumn()
+    summary: string;
+    @ViewColumn()
+    thumbnail: string;
 
     @ViewColumn()
     views: number;

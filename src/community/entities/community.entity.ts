@@ -20,6 +20,10 @@ export class Community {
     content: string;
     @Column({ name: "tag", length: 16 })
     tag: string;
+    @Column({ name: "summary", length: 64})
+    summary: string;
+    @Column({ name: "thumbnail", nullable: true, length: 256 })
+    thumbnail: string;
 
     @Column({ name: "views" })
     views: number;
