@@ -42,7 +42,7 @@ export class StorageService {
   }
 
   async findOne(id: number): Promise<Storage> {
-    return await this.storageRepository.findOneBy({
+    return await this.storageRepository.findOneByOrFail({
       id: id
     });
   }
