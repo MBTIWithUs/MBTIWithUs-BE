@@ -20,6 +20,9 @@ export class Comment {
     @Column({ name: "content", length: 256 })
     content: string;
 
+    @Column({ name: "likes" })
+    likes: number;
+
     @Column({ name: "created_at", type: 'bigint' })
     createdAt: string;
     @Column({ name: "updated_at", type: 'bigint', nullable: true })

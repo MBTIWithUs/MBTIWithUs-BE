@@ -37,6 +37,9 @@ export class CommunityService {
       like.isLiked = true;
       await this.communityLikeRepository.save(like);
     }
+    let community: Community = await this.findOneNoViewsIncreaseWithoutLikeRelations(like.communityId);
+    community.likes = await this.findLikeCount(like.communityId);
+    await this.communityRepository.save(community);
     return like;
   }
 
@@ -68,7 +71,6 @@ export class CommunityService {
       .where('cs.deletedAt IS NULL');
     let paginated: Pagination<any> = await paginate(queryBuilder, options);
     for (let communitySummary of paginated.items) {
-      communitySummary.likes = await this.findLikeCount(communitySummary.id);
       communitySummary.isLiked = await this.findIsLiked(communitySummary.id, userId);
     }
     return paginated;
@@ -82,7 +84,6 @@ export class CommunityService {
       ;
     let paginated: Pagination<any> = await paginate(queryBuilder, options);
     for (let communitySummary of paginated.items) {
-      communitySummary.likes = await this.findLikeCount(communitySummary.id);
       communitySummary.isLiked = await this.findIsLiked(communitySummary.id, userId);
     }
     return paginated;
@@ -120,17 +121,15 @@ export class CommunityService {
         comments: true
       }
     });
-    result.likes = await this.findLikeCount(id);
     result.isLiked = await this.findIsLiked(id, userId);
     for (let comment of result.comments) {
-      comment.likes = await this.commentService.findLikeCount(comment.id);
       comment.isLiked = await this.commentService.findIsLiked(comment.id, userId);
     }
     return result;
   }
 
-  async findOneWithoutLikeRelations(id: number): Promise<any> {
-    let community: Community = await this.communityRepository.findOneByOrFail({
+  async findOneWithoutLikeRelations(id: number): Promise<Community> {
+    let community: any = await this.communityRepository.findOneByOrFail({
       id: id, deletedAt: IsNull()
     });
     community.views++;
@@ -145,7 +144,7 @@ export class CommunityService {
     });
   }
 
-  async findOneNoViewsIncrease(id: number, userId: number): Promise<any> {
+  async findOneNoViewsIncrease(id: number, creatorId: number): Promise<any> {
     let result: any = await this.communityRepository.findOneOrFail({
       where: {
         id: id, deletedAt: IsNull()
@@ -154,16 +153,31 @@ export class CommunityService {
         comments: true
       }
     });
-    result.likes = await this.findLikeCount(id);
-    result.isLiked = await this.findIsLiked(id, userId);
+    result.isLiked = await this.findIsLiked(id, creatorId);
+    for (let comment of result.comments) {
+      comment.isLiked = await this.commentService.findIsLiked(comment.id, creatorId);
+    }
     return result;
   }
+
+  async findOneNoViewsIncreaseWithoutLikeRelations(id: number): Promise<Community> {
+    let result: any = await this.communityRepository.findOneOrFail({
+      where: {
+        id: id, deletedAt: IsNull()
+      },
+      relations: {
+        comments: true
+      }
+    });
+    return result;
+  }
+
 
   async update(id: number, updateCommunityDto: UpdateCommunityDto, userId: number): Promise<any> {
     let community = await this.findOneNoViewsIncrease(id, userId);
     this.communityMapper.updateDtoToEntity(updateCommunityDto, community);
     await this.communityRepository.save(community);
-    return await this.findOne(id, userId);
+    return await this.findOneNoViewsIncrease(id, userId);
   }
 
   async remove(id: number, userId: number): Promise<void> {

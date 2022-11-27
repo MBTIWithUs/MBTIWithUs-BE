@@ -12,6 +12,7 @@ export class CommentMapper {
         entity.parentCommentId = createDto.parentCommentId;
         entity.isAnonymous = createDto.isAnonymous;
         entity.content = createDto.content;
+        entity.likes = 0;
         entity.createdAt = new Date().getTime() + "";
         return entity;
     }

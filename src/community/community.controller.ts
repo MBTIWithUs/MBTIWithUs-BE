@@ -99,6 +99,7 @@ export class CommunityController {
   }
 
   @Post(':id/like')
+  @UseGuards(AuthGuard('jwt'))
   async toggleLike(@Param('id') id: string, @Request() req): Promise<any> {
     let user: User = req.user;
     return await this.communityService.toggleLike(+id, user.id);

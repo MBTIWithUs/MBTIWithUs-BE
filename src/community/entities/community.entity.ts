@@ -28,6 +28,9 @@ export class Community {
     @Column({ name: "views" })
     views: number;
 
+    @Column({ name: "likes" })
+    likes: number;
+
     @Column({ name: "created_at", type: 'bigint' })
     createdAt: string;
     @Column({ name: "updated_at", type: 'bigint', nullable: true })

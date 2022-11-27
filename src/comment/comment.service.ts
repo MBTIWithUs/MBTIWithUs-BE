@@ -35,6 +35,9 @@ export class CommentService {
       like.isLiked = true;
       await this.commentLikeRepository.save(like);
     }
+    let comment: Comment = await this.findOne(like.commentId);
+    comment.likes = await this.findLikeCount(like.commentId);
+    await this.commentRepository.save(comment);
     return like;
   }
 
