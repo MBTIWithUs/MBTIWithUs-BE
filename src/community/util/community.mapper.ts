@@ -13,9 +13,6 @@ export class CommunityMapper {
 
     findFirstImgTagSrc(str: string): string {
         const $ = load(str);
-        console.log($('img'));
-        console.log($('img').first());
-        console.log($('img').first().attr('src'));
         let src = $('img').first().attr('src');
         return Boolean(src) ? src : null;
     }
