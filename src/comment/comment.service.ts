@@ -57,6 +57,7 @@ export class CommentService {
   }
 
   async create(createCommentDto: CreateCommentDto, creatorId: number): Promise<Community> {
+    let community: Community = await this.communityService.findOneNoViewsIncreaseWithoutLikeRelations(createCommentDto.communityId);
     let comment: Comment = this.commentMapper.createDtoToEntity(createCommentDto);
     comment.creatorId = creatorId;
     await this.commentRepository.save(comment);
@@ -91,9 +92,9 @@ export class CommentService {
 
   async remove(id: number, creatorId: number): Promise<Community> {
     let comment: Comment = await this.findOne(id);
-    comment.deletedAt = new Date().getTime() + "";
-    await this.commentRepository.save(comment);
     let communityId = await this.findCommunityId(id);
+    await this.commentRepository.delete(comment.id);
+    console.log(communityId);
     return await this.communityService.findOneNoViewsIncrease(communityId, creatorId);
   }
 }

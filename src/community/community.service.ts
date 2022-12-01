@@ -68,7 +68,9 @@ export class CommunityService {
   async findAll(options: IPaginationOptions, userId: number): Promise<Pagination<CommunitySummary>> {
     let queryBuilder = this.communitySummaryRepository.createQueryBuilder('cs');
     queryBuilder
-      .where('cs.deletedAt IS NULL');
+      .where('cs.deletedAt IS NULL')
+      .orderBy({'createdAt': "DESC"})
+      ;
     let paginated: Pagination<any> = await paginate(queryBuilder, options);
     for (let communitySummary of paginated.items) {
       communitySummary.isLiked = await this.findIsLiked(communitySummary.id, userId);
@@ -80,7 +82,8 @@ export class CommunityService {
     let queryBuilder = this.communitySummaryRepository.createQueryBuilder('cs');
     queryBuilder
       .where('cs.deletedAt IS NULL')
-      .where('cs.tag = :tag', { tag: tag })
+      .andWhere('cs.tag = :tag', { tag: tag })
+      .addOrderBy('createdAt', 'DESC')
       ;
     let paginated: Pagination<any> = await paginate(queryBuilder, options);
     for (let communitySummary of paginated.items) {
@@ -92,7 +95,9 @@ export class CommunityService {
   async findAllWithoutLikeRelations(options: IPaginationOptions): Promise<Pagination<CommunitySummary>> {
     let queryBuilder = this.communitySummaryRepository.createQueryBuilder('cs');
     queryBuilder
-      .where('cs.deletedAt IS NULL');
+      .where('cs.deletedAt IS NULL')
+      .addOrderBy('createdAt', 'DESC')
+      ;
     let paginated: Pagination<any> = await paginate(queryBuilder, options);
     return paginated;
   }
@@ -101,7 +106,8 @@ export class CommunityService {
     let queryBuilder = this.communitySummaryRepository.createQueryBuilder('cs');
     queryBuilder
       .where('cs.deletedAt IS NULL')
-      .where('cs.tag = :tag', { tag: tag })
+      .andWhere('cs.tag = :tag', { tag: tag })
+      .addOrderBy('createdAt', 'DESC')
       ;
     let paginated: Pagination<any> = await paginate(queryBuilder, options);
     return paginated;
@@ -118,7 +124,9 @@ export class CommunityService {
         id: id, deletedAt: IsNull()
       },
       relations: {
-        comments: true
+        comments: {
+          
+        }
       }
     });
     result.isLiked = await this.findIsLiked(id, userId);
@@ -155,6 +163,9 @@ export class CommunityService {
     });
     result.isLiked = await this.findIsLiked(id, creatorId);
     for (let comment of result.comments) {
+      if (comment.deletedAt != null) {
+        result.comments.remove(comment);
+      }
       comment.isLiked = await this.commentService.findIsLiked(comment.id, creatorId);
     }
     return result;
