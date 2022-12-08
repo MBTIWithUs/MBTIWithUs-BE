@@ -14,7 +14,7 @@ export class CreateCommentDto {
     isAnonymous: boolean;
 
     @IsNotEmpty()
-    @Length(2, 256)
+    @Length(1, 256)
     content: string;
 
     // likes: number;
