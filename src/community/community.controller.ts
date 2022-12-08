@@ -72,7 +72,7 @@ export class CommunityController {
   }
 
   @Get('/anonymous/:id')
-  async findOneA(@Param('id') id: string, @Request() req): Promise<any> {
+  async findOneAnonymous(@Param('id') id: string, @Request() req): Promise<any> {
     return await this.communityService.findOneWithoutLikeRelations(+id);
   }
 

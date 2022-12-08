@@ -10,10 +10,10 @@ export class CreateCommunityDto {
     isAnonymous: boolean;
 
     @IsNotEmpty()
-    @Length(5, 64)
+    @Length(2, 64)
     title: string;
     @IsNotEmpty()
-    @Length(10, 1024)
+    @Length(2, 1024)
     content: string;
     @IsNotEmpty()
     @Length(4, 16)
